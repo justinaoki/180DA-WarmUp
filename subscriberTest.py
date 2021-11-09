@@ -1,4 +1,5 @@
 import paho.mqtt.client as mqtt
+import os
 
 # 0. define callbacks - functions that run when events happen.
 # The callback for when the client receives a CONNACK response from the server.
@@ -19,7 +20,10 @@ def on_disconnect(client, userdata, rc):
 # The default message callback.
 # (you can create separate callbacks per subscribed topic)
 def on_message(client, userdata, message):
-  print('Received message: ' + str(message.payload) + ' on topic ' + message.topic + ' with QoS ' + str(message.qos))
+  print('Received message: ' + str(message.payload.decode("utf-8")) + ' on topic ' + message.topic + ' with QoS ' + str(message.qos))
+  if str(message.payload.decode("utf-8")) == "Run CLIclick":
+    print("Message detected, command will be performed")
+    os.system("cliclick c:0,0")
 
 # 1. create a client instance.
 client = mqtt.Client()
